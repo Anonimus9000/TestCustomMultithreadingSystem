@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using System.Diagnostics;
 using MultithreadingTest.CustomJobsSystem.Dispatcher;
 using MultithreadingTest.CustomJobsSystem.OtherThreadInvoker;
@@ -8,7 +8,6 @@ using TMPro;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
 namespace MultithreadingTest
@@ -34,32 +33,44 @@ namespace MultithreadingTest
         private OtherThreadInvoker _otherThreadInvoker;
         private IParallelJobFor<int>[] _jobs;
 
-        private void Awake()
+        private IEnumerator Start()
         {
-            var stopwatch = new Stopwatch();
             _dispatcher = new GameObject().AddComponent<Dispatcher>();
             _dispatcher.Initialize(IterationCount);
             _parallelInvokerFor = new ParallelInvokerFor(_dispatcher, IterationCount);
             _otherThreadInvoker =
                 new OtherThreadInvoker(ApplicationThreadingSynchronizer.QuitToken, _dispatcher, IterationCount);
+            
             InitializeJobs();
            
+            var stopwatch = new Stopwatch();
+            
+            yield return new WaitForSeconds(1);
+
             stopwatch.Start();
             ParallelForBench();
             stopwatch.Stop();
             _parallelForResult.text = stopwatch.ElapsedMilliseconds.ToString();
+
+            yield return new WaitForSeconds(1);
             
+            stopwatch.Reset();
             stopwatch.Start();
             OtherThreadInvokerBench();
             stopwatch.Stop();
             _otherThreadResult.text = stopwatch.ElapsedMilliseconds.ToString();
 
-            
+            yield return new WaitForSeconds(1);
+
+            stopwatch.Reset();
             stopwatch.Start();
             MainThreadInvoker();
             stopwatch.Stop();
             _mainThreadResult.text = stopwatch.ElapsedMilliseconds.ToString();
             
+            yield return new WaitForSeconds(1);
+
+            stopwatch.Reset();
             stopwatch.Start();
             JobSystemBench();
             stopwatch.Stop();
@@ -68,17 +79,17 @@ namespace MultithreadingTest
 
         private void InitializeJobs()
         {
-            Random random = new Random();
+            var random = new Random();
             _jobs = new IParallelJobFor<int>[IterationCount];
-            for (int i = 0; i < IterationCount; i++)
+            for (var i = 0; i < IterationCount; i++)
             {
                 _jobs[i] = new TestJobFor(
-                    result =>
+                    _ =>
                     {
                     },
                     () =>
                     {
-                        int result = 0;
+                        var result = 0;
                         result += random.Next(0, 100);
                         result -= random.Next(0, 100);
                         return result;
@@ -88,7 +99,7 @@ namespace MultithreadingTest
 
         private void MainThreadInvoker()
         {
-            for (int i = 0; i < IterationCount; i++)
+            for (var i = 0; i < IterationCount; i++)
             {
                 var job = _jobs[i];
                 var output = job.OtherThreadFunc.Invoke();
@@ -103,7 +114,7 @@ namespace MultithreadingTest
 
         private void OtherThreadInvokerBench()
         {
-            for (int i = 0; i < IterationCount; i++)
+            for (var i = 0; i < IterationCount; i++)
             {
                 _otherThreadInvoker.Invoke(_jobs[i], JobTime.TempTime);
             }
@@ -119,7 +130,6 @@ namespace MultithreadingTest
             };
             
             var jobHandle = job.Schedule(IterationCount, 16);
-            
             jobHandle.Complete();
 
             output.Dispose();
