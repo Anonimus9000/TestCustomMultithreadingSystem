@@ -8,7 +8,7 @@ namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker.JobThreads
     public class InfinityJobThread : IPoolableJobThread
     {
         public Guid ID { get; }
-        public int LoadedThread { get; }
+        public int LoadedThread => _jobs.Count;
         public CancellationToken Token { get; }
 
         private readonly List<Action> _jobs;

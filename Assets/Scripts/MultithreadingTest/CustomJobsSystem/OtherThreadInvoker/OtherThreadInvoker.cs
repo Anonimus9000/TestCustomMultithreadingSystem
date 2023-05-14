@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using MultithreadingTest.CustomJobsSystem.OtherThreadInvoker.JobThreads;
-using MultithreadingTest.CustomJobsSystem.ParallelFor;
 
 namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
 {
@@ -24,7 +23,7 @@ namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
             InitJobPools(tempJobsCapacity, infinityJobCapacity, tempJobThreadsPoolCount, infinityJobThreadsPoolCount, mainCancellationToken);
         }
 
-        public void Invoke<TInput>(IParallelJobFor<TInput> job, JobTime jobTime)
+        public void Invoke<TInput>(IOtherThreadJob<TInput> job, JobTime jobTime)
         {
             if (jobTime == JobTime.TempTime)
             {
@@ -58,7 +57,7 @@ namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
             }
         }
         
-        private void InvokeInfinityJob<TInput>(IParallelJobFor<TInput> job)
+        private void InvokeInfinityJob<TInput>(IOtherThreadJob<TInput> job)
         {
             var leastLoadedThread = GetLeastLoadedThread(_infinityJobThreadsPool);
             leastLoadedThread.JoinJob(() =>
@@ -68,7 +67,7 @@ namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
             });
         }
 
-        private void InvokeTempJob<TInput>(IParallelJobFor<TInput> job)
+        private void InvokeTempJob<TInput>(IOtherThreadJob<TInput> job)
         {
             var leastLoadedThread = GetLeastLoadedThread(_tempJobThreadsPool);
             leastLoadedThread.JoinJob(() =>
@@ -80,17 +79,19 @@ namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
 
         private IPoolableJobThread GetLeastLoadedThread(List<IPoolableJobThread> pool)
         {
-            var minimumLoadedThread = pool[0];
+            // var minimumLoadedThread = pool[0];
+            //
+            // foreach (var tempJobThread in pool)
+            // {
+            //     if (tempJobThread.LoadedThread < minimumLoadedThread.LoadedThread)
+            //     {
+            //         minimumLoadedThread = tempJobThread;
+            //     }
+            // }
+            //
+            // return minimumLoadedThread;
 
-            foreach (var tempJobThread in pool)
-            {
-                if (tempJobThread.LoadedThread < minimumLoadedThread.LoadedThread)
-                {
-                    minimumLoadedThread = tempJobThread;
-                }
-            }
-
-            return minimumLoadedThread;
+            return pool[0];
         }
     }
 }

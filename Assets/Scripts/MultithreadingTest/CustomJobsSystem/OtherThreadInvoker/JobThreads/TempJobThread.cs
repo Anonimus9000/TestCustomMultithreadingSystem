@@ -31,13 +31,14 @@ namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker.JobThreads
         {
             Task.Run(() =>
             {
-                if (Token.IsCancellationRequested)
-                {
-                    return;
-                }
-
                 while (true)
                 {
+                    if (Token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    
                     if (_jobs.Count <= 0)
                     {
                         continue;
