@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MultithreadingTest.OtherThreadInvoker
+namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
 {
     public interface IParallelJob<TInput>
     {

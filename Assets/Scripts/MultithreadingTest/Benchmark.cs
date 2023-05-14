@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using MultithreadingTest.CustomJobsSystem.Dispatcher;
+using MultithreadingTest.CustomJobsSystem.OtherThreadInvoker;
+using MultithreadingTest.CustomJobsSystem.ParallelFor;
 using MultithreadingTest.JobSystemTest;
-using MultithreadingTest.OtherThreadInvoker;
-using MultithreadingTest.ParallelFor;
 using TMPro;
 using Unity.Collections;
 using Unity.Jobs;
@@ -30,7 +31,7 @@ namespace MultithreadingTest
         
         private Dispatcher _dispatcher;
         private ParallelInvokerFor _parallelInvokerFor;
-        private OtherThreadInvoker.OtherThreadInvoker _otherThreadInvoker;
+        private OtherThreadInvoker _otherThreadInvoker;
         private IParallelJobFor<int>[] _jobs;
 
         private void Awake()
@@ -40,7 +41,7 @@ namespace MultithreadingTest
             _dispatcher.Initialize(IterationCount);
             _parallelInvokerFor = new ParallelInvokerFor(_dispatcher, IterationCount);
             _otherThreadInvoker =
-                new OtherThreadInvoker.OtherThreadInvoker(ApplicationThreadingSynchronizer.QuitToken, _dispatcher, IterationCount);
+                new OtherThreadInvoker(ApplicationThreadingSynchronizer.QuitToken, _dispatcher, IterationCount);
             InitializeJobs();
            
             stopwatch.Start();

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MultithreadingTest.ParallelFor
+namespace MultithreadingTest.CustomJobsSystem.ParallelFor
 {
     public class ParallelInvokerFor
     {
-        private readonly Dispatcher _dispatcher;
+        private readonly Dispatcher.Dispatcher _dispatcher;
         private List<Action> _actionsUpdate;
 
-        public ParallelInvokerFor(Dispatcher dispatcher, int capacity = 10000)
+        public ParallelInvokerFor(Dispatcher.Dispatcher dispatcher, int capacity = 10000)
         {
             _dispatcher = dispatcher;
             _actionsUpdate = new List<Action>(capacity);

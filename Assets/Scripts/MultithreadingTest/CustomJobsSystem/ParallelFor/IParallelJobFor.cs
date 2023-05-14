@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MultithreadingTest.ParallelFor
+namespace MultithreadingTest.CustomJobsSystem.ParallelFor
 {
     public interface IParallelJobFor<TInput>
     {

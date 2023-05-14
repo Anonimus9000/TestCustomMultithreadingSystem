@@ -1,4 +1,4 @@
-﻿namespace MultithreadingTest.OtherThreadInvoker
+﻿namespace MultithreadingTest.CustomJobsSystem.OtherThreadInvoker
 {
     public enum JobTime
     {

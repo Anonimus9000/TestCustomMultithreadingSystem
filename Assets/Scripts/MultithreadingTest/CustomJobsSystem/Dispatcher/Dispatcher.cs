@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MultithreadingTest
+namespace MultithreadingTest.CustomJobsSystem.Dispatcher
 {
     public class Dispatcher : MonoBehaviour
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using MultithreadingTest.ParallelFor;
+using MultithreadingTest.CustomJobsSystem.ParallelFor;
 
 namespace MultithreadingTest
 {

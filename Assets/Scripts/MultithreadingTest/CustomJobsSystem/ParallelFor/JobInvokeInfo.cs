@@ -1,4 +1,4 @@
-﻿namespace MultithreadingTest.ParallelFor
+﻿namespace MultithreadingTest.CustomJobsSystem.ParallelFor
 {
     public enum ParallelJobTime
     {
